@@ -2,21 +2,19 @@
 #ifndef AUDIOMODULE_H
 #define AUDIOMODULE_H
 
+#include <chrono>
 #include <vector>
 #include <string>
 #include "RtAudio.h"
 
+
 class AudioSample {
 public:
     std::vector<float> data;
-    bool play = false;
-    size_t currentSampleIndex = 0;
-
+    int channel = 0;
+    size_t frameCounter = 0;
     void loadFromFile(const std::string& filename);
-    void reset() { 
-        currentSampleIndex = 0;
-        play = false;
-    }
+    void reset() { frameCounter = 0; } 
 };
 class AudioModule {
 public:
@@ -30,6 +28,7 @@ public:
 private:
     std::vector<AudioSample> samples;
     RtAudio dac;
+    size_t activeChannel = -1;
     void setupAudioStream();
 };
 
