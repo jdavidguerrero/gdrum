@@ -17,8 +17,9 @@
 #include <unistd.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <pigpio.h>
 #include <assert.h>
+#include "wiringPi.h"
+#include "wiringPiI2C.h"
 
 // enable debug messages and error messages to stderr
 #ifndef NDEBUG

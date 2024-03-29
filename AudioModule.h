@@ -5,31 +5,25 @@
 #include <chrono>
 #include <vector>
 #include <string>
-#include "RtAudio.h"
+#include <iostream>
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
 
 class AudioSample {
 public:
-    std::vector<float> data;
-    int channel = 0;
-    size_t frameCounter = 0;
-    void loadFromFile(const std::string& filename);
-    void reset() { frameCounter = 0; } 
+    std::string sampleRoute;
 };
 class AudioModule {
 public:
     AudioModule();
     ~AudioModule();
     void loadSampleForChannel(const std::string& filename, size_t channel);
-    void playSample(size_t channel);
-    static int audioCallback(void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
-                             double streamTime, RtAudioStreamStatus status, void *userData);
-
+    void playSample(size_t channel, int volume);
 private:
     std::vector<AudioSample> samples;
-    RtAudio dac;
-    size_t activeChannel = -1;
-    void setupAudioStream();
+    AudioModule(const AudioModule&) = delete;
+    AudioModule& operator=(const AudioModule&) = delete;
 };
 
 #endif // AUDIOMODULE_H

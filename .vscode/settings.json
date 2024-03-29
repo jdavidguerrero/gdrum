@@ -58,6 +58,7 @@
         "variant": "cpp",
         "format": "cpp",
         "csignal": "cpp",
-        "cstring": "cpp"
+        "cstring": "cpp",
+        "cinttypes": "cpp"
     }
 }

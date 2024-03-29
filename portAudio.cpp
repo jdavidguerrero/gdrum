@@ -32,6 +32,8 @@ static int paCallback(const void* inputBuffer, void* outputBuffer,
                       PaStreamCallbackFlags statusFlags,
                       void* userData) {
     auto* out = static_cast<float*>(outputBuffer);
+    std::cout << "Callback "<< std::endl;
+
     auto* data = static_cast<std::vector<float>*>(userData);
     static size_t frameCounter = 0;
 
