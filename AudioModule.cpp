@@ -36,7 +36,7 @@ void AudioSample::loadFromFile(const std::string& filename) {
 
 void AudioModule::setupAudioStream() {
 
- 
+
     RtAudio::StreamParameters parameters;
     parameters.deviceId = dac.getDefaultOutputDevice();
     std::cout << "DeviceId: "<< parameters.deviceId << std::endl;
@@ -114,10 +114,12 @@ int AudioModule::audioCallback(void *outputBuffer, void *inputBuffer, unsigned i
         return 0;
     }
 
+     float volume = sample.volume; 
+
     for (unsigned int i = 0; i < nBufferFrames; ++i) {
         if (sample.frameCounter < sample.data.size()) {
-            *out++ = sample.data[sample.frameCounter++]; // Canal izquierdo
-            *out++ = sample.data[sample.frameCounter < sample.data.size() ? sample.frameCounter++ : sample.frameCounter]; // Canal derecho
+            *out++ = sample.data[sample.frameCounter++]* volume; // Left Channel
+            *out++ = sample.data[sample.frameCounter < sample.data.size() ? sample.frameCounter++ : sample.frameCounter]* volume; // Right Channel
         } else {
             *out++ = 0; // Relleno si se alcanza el final del vector
             *out++ = 0;

@@ -1,6 +1,5 @@
 #include "RPI_ads1115.h"
 
-
 /**************************************************************************/
 /*!
     @brief  Instantiates a new ADS1115 class w/appropriate properties
@@ -15,35 +14,30 @@ RPI_ADS1115::RPI_ADS1115() {
 
 /**************************************************************************/
 bool RPI_ADS1X15::begin(uint8_t i2c_addr) {
-        gpioCfgMemAlloc(2);
-        int cfg = gpioCfgGetInternals();
-        cfg |= PI_CFG_NOSIGHANDLER;
-        gpioCfgSetInternals(cfg);
-        int status = gpioInitialise();
-        if (status < 0) {
-                char msg[] = "Cannot init pigpio.";
+int status = wiringPiSetup();
+    if (status != 0) {
         #ifdef DEBUG
-                fprintf(stderr,"%s\n",msg);
-        #endif
-                        throw msg;
-                        return false;
-                }
-        #ifdef DEBUG
-	fprintf(stdout,"Pigpio Initialized .\n");
-        #endif
-        // Open I2C connection in ADS1X15
-        m_i2c_handle = i2cOpen(1, i2c_addr, 0); 
-        if (m_i2c_handle < 0) {
-        char msgI2c[] = "Cannot init I2c.";
-        #ifdef DEBUG
-                fprintf(stderr,"%s\n",msgI2c);
+        fprintf(stderr, "No se pudo inicializar WiringPi.\n");
         #endif
         return false;
-        }
+    }
 
+    #ifdef DEBUG
+    fprintf(stdout, "WiringPi initialized.\n");
+    #endif
+
+    // Abrir la conexión I2C
+    m_i2c_handle = wiringPiI2CSetup(i2c_addr);
+    if (m_i2c_handle < 0) {
         #ifdef DEBUG
-	fprintf(stdout,"I2c Initialized .\n");
+        fprintf(stderr, "Can't init I2C.\n");
         #endif
+        return false;
+    }
+
+    #ifdef DEBUG
+    fprintf(stdout, "Bus I2C Initialized.\n");
+    #endif
 
     return true; 
 }
@@ -280,11 +274,7 @@ bool RPI_ADS1X15::conversionComplete() {
 */
 /**************************************************************************/
 void RPI_ADS1X15::writeRegister(uint8_t reg, uint16_t value) {
-  char buffer[3];
-  buffer[0] = reg;
-  buffer[1] = value >> 8;
-  buffer[2] = value & 0xFF;
-  i2cWriteDevice(m_i2c_handle, buffer, 3);
+  wiringPiI2CWriteReg16(m_i2c_handle, reg,(value>>8) | (value<<8));
 }
 
 /**************************************************************************/
@@ -297,27 +287,9 @@ void RPI_ADS1X15::writeRegister(uint8_t reg, uint16_t value) {
 */
 /**************************************************************************/
 uint16_t RPI_ADS1X15::readRegister(uint8_t reg) {
-  char buffer[2];
-  buffer[0] = reg;
-  i2cWriteByte(m_i2c_handle, reg);
-  i2cReadDevice(m_i2c_handle, buffer, 2);
-  return (uint16_t(buffer[0]) << 8) | uint8_t(buffer[1]);
+  wiringPiI2CWrite(m_i2c_handle, ADS1X15_REG_POINTER_CONVERT);
+  uint16_t reading = wiringPiI2CReadReg16(m_i2c_handle, reg);
+  reading = (reading>>8) | (reading<<8); // yes, wiringPi did not assemble the bytes as we want
+  return reading;
+
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
