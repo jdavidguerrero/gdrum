@@ -1,7 +1,7 @@
 // AudioModule.cpp
-#include <sndfile.h> // Asegúrate de que libsndfile está instalada
+#include "audio/AudioModule.h"
+#include <sndfile.h> 
 #include <iostream>
-#include "AudioModule.h"
 #include <cstring>
 #include <vector>
 #include <thread>

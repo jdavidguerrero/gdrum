@@ -1,0 +1,20 @@
+<RCC>
+    <qresource prefix="/">
+        <file>src/gui/main.qml</file>
+        <file>src/gui/pages/SplashScreen.qml</file>
+        <file>src/gui/pages/MainScreen.qml</file>
+        <file>src/gui/components/SignalChannel.qml</file>
+        <file>src/gui/components/ChannelSample.qml</file>
+        <file>src/gui/components/SliderChannel.qml</file>
+        <file>src/gui/components/TitleBar.qml</file>
+        <file>src/gui/components/WaveContainer.qml</file>
+        <file>src/gui/components/ButtonMenu.qml</file>
+        <file>src/gui/components/ButtonIcon.qml</file>
+        <file>resources/images/background.png</file>
+        <file>resources/images/logo_gdrum.png</file>
+        <file>resources/images/settings.png</file>
+        <file>resources/images/djembe.png</file>
+        <file>resources/images/wave.png</file>
+        <file>resources/fonts/ubuntu.ttf</file>
+    </qresource>
+</RCC>

@@ -1,10 +1,34 @@
 
-#include "AudioModule.h"
-#include "RPI_ads1115.h"
+#include <QGuiApplication>
+#include <QQmlApplicationEngine>
+#include <QQmlContext>
+#include <QQuickStyle>
+#include "audio/AudioModule.h"
+#include "sensors/RPI_ads1115.h"
 #include <iostream>
 #include <unistd.h> 
 
+int main(int argc, char *argv[])
+{
+    QGuiApplication app(argc, argv);
+    QQuickStyle::setStyle("Material");
 
+    QQmlApplicationEngine engine;
+
+   // ControlUnit control_unit;
+    //engine.rootContext()->setContextProperty("control_unit", &control_unit);
+
+    engine.load(QUrl(QStringLiteral("qrc:/src/gui/main.qml")));
+    if (engine.rootObjects().isEmpty())
+        return -1;
+
+    return app.exec();
+}
+
+
+
+
+/*
 int main() {
     RPI_ADS1115 ads;
     AudioModule audioModule;
@@ -38,3 +62,5 @@ int main() {
     audioModule.~AudioModule();
     return 0;
 }
+
+*/
