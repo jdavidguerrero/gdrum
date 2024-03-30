@@ -23,7 +23,10 @@ public:
     ~AudioModule();
     size_t activeChannel = -1;
     void loadSampleForChannel(const std::string& filename, size_t channel);
-    void playSample(size_t channel, int volume);
+    void playSample(size_t channel);
+    static int audioCallback(void *outputBuffer, void *inputBuffer, unsigned int nBufferFrames,
+                             double streamTime, RtAudioStreamStatus status, void *userData);
+
 private:
     std::vector<AudioSample> samples;
     RtAudio dac;
