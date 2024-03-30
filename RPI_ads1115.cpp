@@ -293,21 +293,3 @@ uint16_t RPI_ADS1X15::readRegister(uint8_t reg) {
   return reading;
 
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

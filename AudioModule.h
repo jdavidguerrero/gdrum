@@ -2,28 +2,32 @@
 #ifndef AUDIOMODULE_H
 #define AUDIOMODULE_H
 
+#include "RtAudio.h"
 #include <chrono>
 #include <vector>
 #include <string>
-#include <iostream>
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_mixer.h>
-
 
 class AudioSample {
 public:
-    std::string sampleRoute;
+    std::vector<float> data;
+    int channel = 0;
+    size_t frameCounter = 0;
+    float volume = 0.5f; 
+    void setVolume(int volumeLevel) {volume = static_cast<float>(volumeLevel) / 100.0f;}
+    void loadFromFile(const std::string& filename);
+    void reset() { frameCounter = 0; } 
 };
 class AudioModule {
 public:
     AudioModule();
     ~AudioModule();
+    size_t activeChannel = -1;
     void loadSampleForChannel(const std::string& filename, size_t channel);
     void playSample(size_t channel, int volume);
 private:
     std::vector<AudioSample> samples;
-    AudioModule(const AudioModule&) = delete;
-    AudioModule& operator=(const AudioModule&) = delete;
+    RtAudio dac;
+    void setupAudioStream();
 };
 
 #endif // AUDIOMODULE_H
