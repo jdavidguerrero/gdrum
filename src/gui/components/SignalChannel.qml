@@ -1,23 +1,29 @@
 import QtQuick 2.15
 
 
-Rectangle {
-    id: signalChannel
-    width: 20
-    height: 20
-    color: "#dc2727" // Color inicial
-    radius: width / 2
+    Rectangle {
+        id: signalContainer
+        width: 20
+        height: 20
+        color: "#2C422B" 
+        radius: width / 2
 
-    signal changeColor(string newColor) // Define una señal personalizada
+        Timer {
+            id: sleepTimer
+            interval: 200 
+            repeat: false 
+            onTriggered: {
+                signalContainer.color = "#2C422B"
+            }
+        }
 
-    onChangeColor: {
-        color = newColor // Cambia el color cuando se emite la señal
-    }
 
-    MouseArea {
-        anchors.fill: parent
-        onClicked: {
-            signalChannel.changeColor("#27dc28") // Emite la señal con un nuevo color
+          function blink() {
+            signalContainer.color = "#27dc28"
+            sleepTimer.start();
+
         }
     }
-}
+  
+
+

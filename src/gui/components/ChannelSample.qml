@@ -1,13 +1,14 @@
 import QtQuick 2.15
 
+
 Rectangle {
-    id: channel
+    id: channelSample
     width: 110
     height: 260
     color: "transparent"
+    property int channelId: -1
 
     Rectangle {
-        id: container_channel
         color: "#000e1a18"
         radius: 20
         border.color: "#dfdfdf"
@@ -16,7 +17,6 @@ Rectangle {
     }
 
     Image {
-        id: drum_image
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
@@ -30,6 +30,7 @@ Rectangle {
 
     SliderChannel {
         id: sliderChannel
+        channelId: channelSample.channelId
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
@@ -41,7 +42,7 @@ Rectangle {
     }
 
     SignalChannel {
-        id: signal_channel
+        id: signalChannel
         anchors.left: parent.left
         anchors.right: parent.right
         anchors.top: parent.top
@@ -50,6 +51,10 @@ Rectangle {
         anchors.topMargin: 11
         anchors.bottomMargin: 229
         anchors.rightMargin: 45
+    }
+
+    function blinkSignalChannel() {
+        signalChannel.blink();
     }
 
 

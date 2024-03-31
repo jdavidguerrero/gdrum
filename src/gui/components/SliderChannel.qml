@@ -10,6 +10,8 @@ Slider {
     height: 99
     width: 12
 
+    property int channelId: -1
+
     background: Rectangle {
         implicitWidth: 12
         implicitHeight: 100
@@ -28,7 +30,9 @@ Slider {
             radius: 10
         }
 
-    onMoved: console.log("Slider moved to:", value)
-    onValueChanged: console.log("Slider value changed to:", value)
+
+    onValueChanged: {
+        readSensors.setVolume(channelId, Math.round(value));
+    }
 }
 

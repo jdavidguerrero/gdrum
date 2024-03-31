@@ -7,8 +7,7 @@ import "../components"
         width: 800
         height: 480
         color: "#ffffff"
-
-
+        property var channelComponents: [];
         Item {
             id: borderOne
             x: 0
@@ -104,6 +103,7 @@ import "../components"
 
         ChannelSample {
             id: channel0
+            channelId:0
             width: 110
             height: 260
             anchors.left: parent.left
@@ -114,6 +114,7 @@ import "../components"
 
         ChannelSample {
             id: channel1
+            channelId:1
             width: 110
             height: 260
             anchors.left: parent.left
@@ -126,6 +127,7 @@ import "../components"
 
         ChannelSample {
             id: channel2
+            channelId:2
             width: 110
             height: 260
             anchors.left: parent.left
@@ -136,6 +138,7 @@ import "../components"
 
         ChannelSample {
             id: channel3
+            channelId:3
             width: 110
             height: 260
             anchors.left: parent.left
@@ -146,6 +149,7 @@ import "../components"
 
         ChannelSample {
             id: channel4
+            channelId:4
             width: 110
             height: 260
             anchors.left: parent.left
@@ -154,12 +158,22 @@ import "../components"
             anchors.topMargin: 195
         }
 
+       Component.onCompleted: {
+    channelComponents = [channel0, channel1, channel2, channel3, channel4];
+}
 
+    Connections {
+    target: readSensors
+    function onThresholdExceeded(channel) {
+    if (channel >= 0 && channel < channelComponents.length) {
+        channelComponents[channel].blinkSignalChannel();
+      
+    }
+    }
 
-
-
+}
 
 
 
     }
-
+ 

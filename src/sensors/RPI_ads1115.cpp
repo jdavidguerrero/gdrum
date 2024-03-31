@@ -89,6 +89,7 @@ uint16_t RPI_ADS1X15::getDataRate() { return m_dataRate; }
 */
 /**************************************************************************/
 int16_t RPI_ADS1X15::readADC_SingleEnded(uint8_t channel) {
+  std::lock_guard<std::mutex> lock(m_mutex);
   if (channel > 3) {
     return 0;
   }

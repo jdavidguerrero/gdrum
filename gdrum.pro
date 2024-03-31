@@ -1,4 +1,4 @@
-QT += gui core quick quickcontrols2
+QT += gui core qml quick quickcontrols2
 CONFIG += c++11
 TARGET = gdrum
 DEFINES += QT_DEPRECATED_WARNINGS
@@ -14,11 +14,17 @@ UI_DIR = output/ui
 SOURCES += \
     src/main.cpp \
     src/sensors/RPI_ads1115.cpp \
-    src/audio/AudioModule.cpp
+    src/sensors/ChannelRead.cpp \
+    src/sensors/Worker.cpp \
+    src/audio/AudioModule.cpp \
+
 
 HEADERS += \
     include/sensors/RPI_ads1115.h \
-    include/audio/AudioModule.h
+    include/sensors/ChannelRead.h \
+    include/sensors/Worker.h \
+    include/audio/AudioModule.h 
+    
 
 # Configuración de los recursos
 RESOURCES += \

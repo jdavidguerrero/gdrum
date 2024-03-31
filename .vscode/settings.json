@@ -59,6 +59,12 @@
         "format": "cpp",
         "csignal": "cpp",
         "cstring": "cpp",
-        "cinttypes": "cpp"
+        "cinttypes": "cpp",
+        "qobject": "cpp",
+        "condition_variable": "cpp",
+        "list": "cpp",
+        "map": "cpp",
+        "future": "cpp",
+        "mutex": "cpp"
     }
 }

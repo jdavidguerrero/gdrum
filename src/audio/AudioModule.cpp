@@ -45,7 +45,7 @@ void AudioModule::setupAudioStream() {
     unsigned int bufferFrames = 512; 
 
     try {
-    std::cout << "Conmfig audio stream..." << std::endl;
+    std::cout << "Configuring audio stream..." << std::endl;
     dac.openStream(&parameters, nullptr, RTAUDIO_FLOAT32, sampleRate, &bufferFrames, &AudioModule::audioCallback, this);
     if (dac.isStreamOpen()) {
         std::cout << "Audio Stream Opened." << std::endl;
@@ -66,6 +66,11 @@ void AudioModule::setupAudioStream() {
 }
 }
 
+void AudioModule::setVolumeChannel(size_t channel, int volumeLevel) {
+    if (channel < samples.size()) {
+        samples[channel].setVolume(volumeLevel);
+    }
+}
 void AudioModule::loadSampleForChannel(const std::string& filename, size_t channel) {
     std::cout << "Loading sample for channel " << channel << " from file: " << filename << std::endl;
 
@@ -102,11 +107,11 @@ int AudioModule::audioCallback(void *outputBuffer, void *inputBuffer, unsigned i
                                double streamTime, RtAudioStreamStatus status, void *userData) {
     AudioModule* audioModule = static_cast<AudioModule*>(userData);
     float *out = static_cast<float *>(outputBuffer);
+     
     if (!audioModule || audioModule->activeChannel >= audioModule->samples.size()) {
         std::fill_n(out, nBufferFrames * 2, 0); // Llenar de ceros si no hay datos válidos
         return 0;
     }
-
     AudioSample& sample = audioModule->samples[audioModule->activeChannel];
     if (sample.frameCounter >= sample.data.size()) {
         // Si ya se reprodujo toda la muestra, llenar de ceros y considerar detener el stream

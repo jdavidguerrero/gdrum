@@ -54,11 +54,19 @@ OBJECTS_DIR   = output/obj/
 
 SOURCES       = src/main.cpp \
 		src/sensors/RPI_ads1115.cpp \
-		src/audio/AudioModule.cpp output/rcc/qrc_qml.cpp
+		src/sensors/ChannelRead.cpp \
+		src/sensors/Worker.cpp \
+		src/audio/AudioModule.cpp output/rcc/qrc_qml.cpp \
+		output/moc/moc_ChannelRead.cpp \
+		output/moc/moc_Worker.cpp
 OBJECTS       = output/obj/main.o \
 		output/obj/RPI_ads1115.o \
+		output/obj/ChannelRead.o \
+		output/obj/Worker.o \
 		output/obj/AudioModule.o \
-		output/obj/qrc_qml.o
+		output/obj/qrc_qml.o \
+		output/obj/moc_ChannelRead.o \
+		output/obj/moc_Worker.o
 DIST          = /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/common/unix.conf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/common/linux.conf \
@@ -144,8 +152,12 @@ DIST          = /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/spec_pre.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/yacc.prf \
 		/usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/lex.prf \
 		gdrum.pro include/sensors/RPI_ads1115.h \
+		include/sensors/ChannelRead.h \
+		include/sensors/Worker.h \
 		include/audio/AudioModule.h src/main.cpp \
 		src/sensors/RPI_ads1115.cpp \
+		src/sensors/ChannelRead.cpp \
+		src/sensors/Worker.cpp \
 		src/audio/AudioModule.cpp
 QMAKE_TARGET  = gdrum
 DESTDIR       = output/
@@ -348,8 +360,8 @@ distdir: FORCE
 	$(COPY_FILE) --parents $(DIST) $(DISTDIR)/
 	$(COPY_FILE) --parents qml.qrc $(DISTDIR)/
 	$(COPY_FILE) --parents /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp $(DISTDIR)/
-	$(COPY_FILE) --parents include/sensors/RPI_ads1115.h include/audio/AudioModule.h $(DISTDIR)/
-	$(COPY_FILE) --parents src/main.cpp src/sensors/RPI_ads1115.cpp src/audio/AudioModule.cpp $(DISTDIR)/
+	$(COPY_FILE) --parents include/sensors/RPI_ads1115.h include/sensors/ChannelRead.h include/sensors/Worker.h include/audio/AudioModule.h $(DISTDIR)/
+	$(COPY_FILE) --parents src/main.cpp src/sensors/RPI_ads1115.cpp src/sensors/ChannelRead.cpp src/sensors/Worker.cpp src/audio/AudioModule.cpp $(DISTDIR)/
 
 
 clean: compiler_clean 
@@ -393,6 +405,9 @@ output/rcc/qrc_qml.cpp: qml.qrc \
 		resources/images/djembe.png \
 		resources/images/settings.png \
 		resources/images/wave.png \
+		resources/audio/slap.wav \
+		resources/audio/tone.wav \
+		resources/audio/bass.wav \
 		resources/fonts/ubuntu.ttf
 	/usr/lib/qt5/bin/rcc -name qml qml.qrc -o output/rcc/qrc_qml.cpp
 
@@ -402,8 +417,22 @@ compiler_moc_predefs_clean:
 output/moc/moc_predefs.h: /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 	g++ -pipe -O2 -std=gnu++11 -Wall -Wextra -dM -E -o output/moc/moc_predefs.h /usr/lib/aarch64-linux-gnu/qt5/mkspecs/features/data/dummy.cpp
 
-compiler_moc_header_make_all:
+compiler_moc_header_make_all: output/moc/moc_ChannelRead.cpp output/moc/moc_Worker.cpp
 compiler_moc_header_clean:
+	-$(DEL_FILE) output/moc/moc_ChannelRead.cpp output/moc/moc_Worker.cpp
+output/moc/moc_ChannelRead.cpp: include/sensors/ChannelRead.h \
+		include/audio/AudioModule.h \
+		include/sensors/RPI_ads1115.h \
+		output/moc/moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/Documents/gdrum/output/moc/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/pi/Documents/gdrum -I/home/pi/Documents/gdrum/include -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtQuickControls2 -I/usr/include/aarch64-linux-gnu/qt5/QtQuick -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtQmlModels -I/usr/include/aarch64-linux-gnu/qt5/QtQml -I/usr/include/aarch64-linux-gnu/qt5/QtNetwork -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/aarch64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/aarch64-linux-gnu/13/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include include/sensors/ChannelRead.h -o output/moc/moc_ChannelRead.cpp
+
+output/moc/moc_Worker.cpp: include/sensors/Worker.h \
+		include/sensors/RPI_ads1115.h \
+		output/moc/moc_predefs.h \
+		/usr/lib/qt5/bin/moc
+	/usr/lib/qt5/bin/moc $(DEFINES) --include /home/pi/Documents/gdrum/output/moc/moc_predefs.h -I/usr/lib/aarch64-linux-gnu/qt5/mkspecs/linux-g++ -I/home/pi/Documents/gdrum -I/home/pi/Documents/gdrum/include -I/usr/include/aarch64-linux-gnu/qt5 -I/usr/include/aarch64-linux-gnu/qt5/QtQuickControls2 -I/usr/include/aarch64-linux-gnu/qt5/QtQuick -I/usr/include/aarch64-linux-gnu/qt5/QtGui -I/usr/include/aarch64-linux-gnu/qt5/QtQmlModels -I/usr/include/aarch64-linux-gnu/qt5/QtQml -I/usr/include/aarch64-linux-gnu/qt5/QtNetwork -I/usr/include/aarch64-linux-gnu/qt5/QtCore -I/usr/include/c++/13 -I/usr/include/aarch64-linux-gnu/c++/13 -I/usr/include/c++/13/backward -I/usr/lib/gcc/aarch64-linux-gnu/13/include -I/usr/local/include -I/usr/include/aarch64-linux-gnu -I/usr/include include/sensors/Worker.h -o output/moc/moc_Worker.cpp
+
 compiler_moc_objc_header_make_all:
 compiler_moc_objc_header_clean:
 compiler_moc_source_make_all:
@@ -414,22 +443,39 @@ compiler_yacc_impl_make_all:
 compiler_yacc_impl_clean:
 compiler_lex_make_all:
 compiler_lex_clean:
-compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean 
+compiler_clean: compiler_rcc_clean compiler_moc_predefs_clean compiler_moc_header_clean 
 
 ####### Compile
 
 output/obj/main.o: src/main.cpp include/audio/AudioModule.h \
-		include/sensors/RPI_ads1115.h
+		include/sensors/RPI_ads1115.h \
+		include/sensors/ChannelRead.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o output/obj/main.o src/main.cpp
 
 output/obj/RPI_ads1115.o: src/sensors/RPI_ads1115.cpp include/sensors/RPI_ads1115.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o output/obj/RPI_ads1115.o src/sensors/RPI_ads1115.cpp
+
+output/obj/ChannelRead.o: src/sensors/ChannelRead.cpp include/sensors/ChannelRead.h \
+		include/audio/AudioModule.h \
+		include/sensors/RPI_ads1115.h \
+		include/sensors/Worker.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o output/obj/ChannelRead.o src/sensors/ChannelRead.cpp
+
+output/obj/Worker.o: src/sensors/Worker.cpp include/sensors/Worker.h \
+		include/sensors/RPI_ads1115.h
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o output/obj/Worker.o src/sensors/Worker.cpp
 
 output/obj/AudioModule.o: src/audio/AudioModule.cpp include/audio/AudioModule.h
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o output/obj/AudioModule.o src/audio/AudioModule.cpp
 
 output/obj/qrc_qml.o: output/rcc/qrc_qml.cpp 
 	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o output/obj/qrc_qml.o output/rcc/qrc_qml.cpp
+
+output/obj/moc_ChannelRead.o: output/moc/moc_ChannelRead.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o output/obj/moc_ChannelRead.o output/moc/moc_ChannelRead.cpp
+
+output/obj/moc_Worker.o: output/moc/moc_Worker.cpp 
+	$(CXX) -c $(CXXFLAGS) $(INCPATH) -o output/obj/moc_Worker.o output/moc/moc_Worker.cpp
 
 ####### Install
 

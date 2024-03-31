@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <mutex>
 #include "wiringPi.h"
 #include "wiringPiI2C.h"
 
@@ -171,6 +172,7 @@ private:
   void writeRegister(uint8_t reg, uint16_t value);
   uint16_t readRegister(uint8_t reg);
   uint8_t buffer[3];
+  std::mutex m_mutex;
 };
 
 
