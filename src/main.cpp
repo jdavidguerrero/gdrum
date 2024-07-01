@@ -26,7 +26,7 @@ int main(int argc, char *argv[])
     auto *audioModule = new AudioModule();
 
     // Carga los samples para los canales
-    audioModule->loadSampleForChannel("resources/audio/bass.wav", 0);
+    audioModule->loadSampleForChannel("resources/audio/slap.wav", 0);
     audioModule->loadSampleForChannel("resources/audio/tone.wav", 1);
     audioModule->loadSampleForChannel("resources/audio/slap.wav", 2);
 

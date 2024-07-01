@@ -29,6 +29,7 @@ void Worker::process() {
         int value = m_ads->readADC_SingleEnded(m_channel);
         auto now = std::chrono::steady_clock::now();
         auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(now - lastTriggerTime).count();
+        std::cout << "Channel: " << m_channel << " Value: " << value << std::endl;
         if (value > m_threshold && elapsed > m_debounceDelay) {
             std::cout << "Channel: " << m_channel << " Value: " << value << std::endl;
             emit thresholdExceeded(m_channel); // Opcionalmente emitir si se va a manejar fuera
